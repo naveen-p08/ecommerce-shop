@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import Rating from "../components/Rating.jsx";
 import products from "../products.js";
+import {useState} from "react";
 
 function ProductScreen() {
+  const [imgIndex, setImgIndex] = useState(0)
   const { id: productId } = useParams();
   const product = products.find((product) => product._id === productId);
-
   return (
     <>
       <Link to={"/"} className={"btn btn-light my-3"}>
@@ -16,7 +17,27 @@ function ProductScreen() {
 
       <Row>
         <Col md={5}>
-          <Image src={product.image[0]} alt={product.name} fluid />
+          <Image
+            className={"main-product-image"}
+            src={product.image[imgIndex]}
+            alt={product.name}
+            fluid
+          />
+
+          <div className={"mt-3 thumbnail-container"}>
+            {product.image.map((image, index) => {
+              return <Image
+                key={index}
+                src={image}
+                alt={`image ${index + 1}`}
+                thumbnail
+                className={`thumbnail ${
+                  product.image[imgIndex] === image ? "thumbnail-active" : ""
+                }`}
+                onClick={() => (setImgIndex(index))}
+              />;
+            })}
+          </div>
         </Col>
         <Col md={4}>
           <ListGroup variant={"flush"}>
@@ -60,7 +81,9 @@ function ProductScreen() {
                   className={"btn-block"}
                   type={"button"}
                   disabled={product.countInStock === 0}
-                >Add to Cart</Button>
+                >
+                  Add to Cart
+                </Button>
               </ListGroup.Item>
             </ListGroup>
           </Card>
