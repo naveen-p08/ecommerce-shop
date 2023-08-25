@@ -2,13 +2,23 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import Rating from "../components/Rating.jsx";
-import products from "../products.js";
-import {useState} from "react";
+import axios from "axios";
+import {useState,useEffect} from "react";
 
 function ProductScreen() {
+  const [product, setProduct] = useState({})
   const [imgIndex, setImgIndex] = useState(0)
   const { id: productId } = useParams();
-  const product = products.find((product) => product._id === productId);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const { data } = await axios.get(`/api/products/${productId}`);
+      setProduct(data);
+    };
+
+    fetchProduct();
+  }, [productId]);
+
   return (
     <>
       <Link to={"/"} className={"btn btn-light my-3"}>
@@ -19,25 +29,25 @@ function ProductScreen() {
         <Col md={5}>
           <Image
             className={"main-product-image"}
-            src={product.image[imgIndex]}
+            src={product?.image}
             alt={product.name}
             fluid
           />
 
-          <div className={"mt-3 thumbnail-container"}>
-            {product.image.map((image, index) => {
-              return <Image
-                key={index}
-                src={image}
-                alt={`image ${index + 1}`}
-                thumbnail
-                className={`thumbnail ${
-                  product.image[imgIndex] === image ? "thumbnail-active" : ""
-                }`}
-                onClick={() => (setImgIndex(index))}
-              />;
-            })}
-          </div>
+          {/*<div className={"mt-3 thumbnail-container"}>*/}
+          {/*  {product && product?.image.map((image, index) => {*/}
+          {/*    return <Image*/}
+          {/*      key={index}*/}
+          {/*      src={image}*/}
+          {/*      alt={`image ${index + 1}`}*/}
+          {/*      thumbnail*/}
+          {/*      className={`thumbnail ${*/}
+          {/*        product.image[imgIndex] === image ? "thumbnail-active" : ""*/}
+          {/*      }`}*/}
+          {/*      onClick={() => (setImgIndex(index))}*/}
+          {/*    />;*/}
+          {/*  })}*/}
+          {/*</div>*/}
         </Col>
         <Col md={4}>
           <ListGroup variant={"flush"}>
