@@ -2,22 +2,13 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import Rating from "../components/Rating.jsx";
-import axios from "axios";
-import {useState,useEffect} from "react";
+import {useGetProductDetailsQuery} from "../slices/productApiSlice.js";
+import Loader from "../components/Loader.jsx";
+import Message from "../components/Message.jsx";
 
 function ProductScreen() {
-  const [product, setProduct] = useState({})
-  const [imgIndex, setImgIndex] = useState(0)
-  const { id: productId } = useParams();
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      const { data } = await axios.get(`/api/products/${productId}`);
-      setProduct(data);
-    };
-
-    fetchProduct();
-  }, [productId]);
+  const {id: productId} = useParams()
+  const {data: product, isLoading, isError} = useGetProductDetailsQuery(productId)
 
   return (
     <>
@@ -25,13 +16,13 @@ function ProductScreen() {
         Go Back
       </Link>
 
-      <Row>
+      {isLoading ? (<Loader />) : isError? (<Message variant={'danger'}>{isError?.error?.message}</Message>) : (<Row>
         <Col md={5}>
           <Image
-            className={"main-product-image"}
-            src={product?.image}
-            alt={product.name}
-            fluid
+              className={"main-product-image"}
+              src={product?.image}
+              alt={product.name}
+              fluid
           />
 
           {/*<div className={"mt-3 thumbnail-container"}>*/}
@@ -56,8 +47,8 @@ function ProductScreen() {
             </ListGroup.Item>
             <ListGroup.Item>
               <Rating
-                value={product.rating}
-                text={`${product.numReviews} Reviews`}
+                  value={product.rating}
+                  text={`${product.numReviews} Reviews`}
               />
             </ListGroup.Item>
             {/*<ListGroup.Item>Price: ${product.price}</ListGroup.Item>*/}
@@ -88,9 +79,9 @@ function ProductScreen() {
               </ListGroup.Item>
               <ListGroup.Item>
                 <Button
-                  className={"btn-block"}
-                  type={"button"}
-                  disabled={product.countInStock === 0}
+                    className={"btn-block"}
+                    type={"button"}
+                    disabled={product.countInStock === 0}
                 >
                   Add to Cart
                 </Button>
@@ -98,7 +89,9 @@ function ProductScreen() {
             </ListGroup>
           </Card>
         </Col>
-      </Row>
+      </Row>) }
+
+
     </>
   );
 }
