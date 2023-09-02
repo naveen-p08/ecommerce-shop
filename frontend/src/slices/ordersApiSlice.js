@@ -1,6 +1,5 @@
 import { apiSlice } from "./apiSlice.js";
 import { ORDERS_URL } from "../constants.js";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const ordersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
