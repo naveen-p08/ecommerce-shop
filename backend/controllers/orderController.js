@@ -47,7 +47,10 @@ const getMyOrders = asyncHandler(async (req, res) => {
 
 // get order by id /api/orders/:id GET
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.find(req.params.id).populate("user", "name email");
+  const order = await Order.findById(req.params.id).populate(
+    "user",
+    "name email",
+  );
 
   if (order) {
     res.status(200).json(order);
@@ -59,10 +62,26 @@ const getOrderById = asyncHandler(async (req, res) => {
 
 // update order payment /api/orders/:id/pay PUT
 const updateOrderToPay = asyncHandler(async (req, res) => {
-  res.send("update order to pay");
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    order.paymentResult = {
+      id: req.body.id,
+      status: req.body.status,
+      update_time: req.body.update_time,
+      email_address: req.body.email_address,
+    };
+
+    const updatedOrder = await order.save();
+    res.status(200).json(updatedOrder);
+  }else {
+    throw new Error('Order not found')
+  }
 });
 
-// update order delivery /api/orders/:id/deliver GET
+// update order delivery /api/orders/:id/deliver PUT
 const updateOrderToDeliver = asyncHandler(async (req, res) => {
   res.send("update order to deliver");
 });
