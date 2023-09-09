@@ -32,7 +32,7 @@ const createProduct = asyncHandler(async (req, res) => {
     numReviews: 0,
     description: "Sample Description",
   });
-  
+
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);
 });
@@ -40,10 +40,10 @@ const createProduct = asyncHandler(async (req, res) => {
 // admin
 // update a product /api/products/:id PUT
 const updateProduct = asyncHandler(async (req, res) => {
-  const {name, price, description, image, brand, category, countInStock} =
+  const { name, price, description, image, brand, category, countInStock } =
     req.body;
-  const product = await Product.findById(req.params.id)
-  
+  const product = await Product.findById(req.params.id);
+
   if (product) {
     product.name = name;
     product.price = price;
@@ -52,13 +52,33 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.brand = brand;
     product.category = category;
     product.countInStock = countInStock;
-    
+
     const updatedProduct = await product.save();
     res.json(updatedProduct);
-  }else {
-    res.status(404)
-    throw new Error("Product not found")
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
   }
 });
 
-export {getProducts, getProductById, createProduct, updateProduct};
+// admin
+// delete a product /api/products/:id DELETE
+const deleteProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    await product.deleteOne({ _id: product._id });
+    res.status(200).json({ message: "Product deleted successfully" });
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
+export {
+  getProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};
