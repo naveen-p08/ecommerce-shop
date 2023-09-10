@@ -5,12 +5,13 @@ import { useParams, useNavigate } from "react-router-dom";
 function SearchBox() {
   const navigate = useNavigate();
   const { keyword: urlKeyword } = useParams();
-  const [keyword, setKeyword] = useState(urlKeyword);
+  const [keyword, setKeyword] = useState(urlKeyword||'');
 
   async function submitHandler(e) {
     e.preventDefault();
-    if (keyword) {
+    if (keyword.trim()) {
       navigate(`/search/${keyword}`);
+      setKeyword('')
     }else {
       navigate("/");
     }
@@ -29,7 +30,7 @@ function SearchBox() {
         placeholder={"Search Products..."}
         className={"mr-sm-2 ml-sm-5"}
       ></Form.Control>
-      <Button type={'submit'} variant={'outline-success'} className={'p-2 mx-2'}>Search</Button>
+      <Button type={'submit'} variant={'outline-light'} className={'p-2 mx-2'}>Search</Button>
     </Form>
   );
 }
