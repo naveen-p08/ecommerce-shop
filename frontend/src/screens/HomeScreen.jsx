@@ -7,8 +7,11 @@ import Message from "../components/Message.jsx";
 import Paginate from "../components/Paginate.jsx";
 
 function HomeScreen() {
-  const { pageNumber } = useParams();
-  const { data, isLoading, isError } = useGetProductsQuery({ pageNumber });
+  const { pageNumber, keyword } = useParams();
+  const { data, isLoading, isError } = useGetProductsQuery({
+    keyword,
+    pageNumber,
+  });
 
   return (
     <>
@@ -26,10 +29,9 @@ function HomeScreen() {
               </Col>
             ))}
           </Row>
-          
-          
+
           {/*   Pagination  */}
-          <Paginate pages={data.pages} page={data.page} />
+          <Paginate pages={data.pages} page={data.page} keyword={keyword} />
         </>
       )}
     </>
