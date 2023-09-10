@@ -214,12 +214,12 @@ function OrderScreen() {
                   ) : (
                     <div>
                       {/*  Pay Test Button*/}
-                      <Button
+                      {/*<Button
                         onClick={onApproveTest}
                         style={{ marginBottom: "10px" }}
                       >
                         Test Pay Order
-                      </Button>
+                      </Button>*/}
 
                       <div>
                         <PayPalButtons

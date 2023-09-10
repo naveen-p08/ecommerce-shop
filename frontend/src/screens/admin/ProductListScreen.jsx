@@ -111,6 +111,7 @@ function ProductListScreen() {
                 ))}
             </tbody>
           </Table>
+          <Paginate pages={data.pages} page={data.page} isAdmin={true}/>
         </>
       )}
     </>
