@@ -6,6 +6,7 @@ import Loader from "../components/Loader.jsx";
 import Message from "../components/Message.jsx";
 import Paginate from "../components/Paginate.jsx";
 import ProductCarousel from "../components/ProductCarousel.jsx";
+import Meta from "../components/Meta.jsx";
 
 function HomeScreen() {
   const { pageNumber, keyword } = useParams();
@@ -28,6 +29,7 @@ function HomeScreen() {
         <Message variant={"danger"}>{isError?.error?.message}</Message>
       ) : (
         <>
+          <Meta title={"Shop"} />
           <h1>Latest Products</h1>
           <Row>
             {data.products.map((product) => (
