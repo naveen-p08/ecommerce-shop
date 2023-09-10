@@ -1,15 +1,12 @@
 import { Link } from "react-router-dom";
 import { Carousel, Image } from "react-bootstrap";
-import Loader from "./Loader.jsx";
 import Message from "./Message.jsx";
 import { useGetTopProductsQuery } from "../slices/productApiSlice.js";
 
 function ProductCarousel() {
   const { data: products, isLoading, error } = useGetTopProductsQuery();
 
-  return isLoading ? (
-    <Loader />
-  ) : error ? (
+  return !isLoading && ( error ? (
     <Message variant={'danger'}>{error.message}</Message>
   ) : (
     <Carousel pause={"hover"} className={"bg-primary mb-4"}>
@@ -26,7 +23,7 @@ function ProductCarousel() {
         </Carousel.Item>
       ))}
     </Carousel>
-  );
+  ))
 }
 
 export default ProductCarousel;
