@@ -7,11 +7,16 @@ import {
   useCreateProductMutation,
   useDeleteProductMutation,
 } from "../../slices/productApiSlice.js";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import Paginate from "../../components/Paginate.jsx";
 
 function ProductListScreen() {
-  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+  const { pageNumber } = useParams();
+
+  const { data, isLoading, error, refetch } = useGetProductsQuery({
+    pageNumber,
+  });
 
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
@@ -79,8 +84,8 @@ function ProductListScreen() {
             </thead>
 
             <tbody>
-              {products &&
-                products.map((product) => (
+              {data.products &&
+                data.products.map((product) => (
                   <tr key={product._id}>
                     <td>{product._id}</td>
                     <td>{product.name}</td>
